@@ -1,0 +1,35 @@
+{
+    "folders": [
+        {
+            "path": "Libraries"
+        },
+        {
+            "name": "Home",
+            "path": "Apps\\Home"
+        },
+        {
+            "name": "Clock",
+            "path": "Apps\\Clock"
+        },
+        {
+            "name": "FileMgr",
+            "path": "Apps\\FileMgr"
+        },
+        {
+            "name": "SoundMon",
+            "path": "Apps\\SoundMon"
+        }
+    ],
+    "settings": {
+        "files.associations": {
+            "array": "cpp",
+            "deque": "cpp",
+            "string": "cpp",
+            "unordered_map": "cpp",
+            "unordered_set": "cpp",
+            "vector": "cpp",
+            "initializer_list": "cpp",
+            "sstream": "cpp"
+        }
+    }
+}

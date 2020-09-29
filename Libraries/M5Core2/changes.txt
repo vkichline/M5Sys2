@@ -1,0 +1,6 @@
+Touch.cpp:
+bool TouchButton::pressedFor(uint32_t ms);
+bool TouchButton::pressedFor(uint32_t ms, uint32_t continuous_time);
+bool TouchButton::releasedFor(uint32_t ms)
+...all marked with 'HACKHACK VK'
+

@@ -16,12 +16,12 @@
             "path": "Apps\\FileMgr"
         },
         {
-            "name": "SoundMon",
-            "path": "Apps\\SoundMon"
-        },
-        {
             "name": "SettingsStorage",
             "path": "Apps\\SettingsStorage"
+        },
+        {
+            "name": "SoundMon",
+            "path": "Apps\\SoundMon"
         }
     ],
     "settings": {

@@ -65,7 +65,9 @@
  * pressed, it will load the "menu.bin" from the sd card
  *
  */
-#include "gitTagVersion.h"
+
+#define ARDUINO_M5Stack_Core_ESP32
+
 #include <esp_partition.h>
 extern "C" {
   #include "esp_ota_ops.h"

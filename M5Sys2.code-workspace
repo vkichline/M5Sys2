@@ -18,6 +18,10 @@
         {
             "name": "SoundMon",
             "path": "Apps\\SoundMon"
+        },
+        {
+            "name": "SettingsStorage",
+            "path": "Apps\\SettingsStorage"
         }
     ],
     "settings": {

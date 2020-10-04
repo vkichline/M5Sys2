@@ -1,6 +1,6 @@
-#include "M5Sys2.h"
 #define ARDUINO_M5STACK_Core2
 #define USE_DISPLAY
+#include <M5Sys2.h>
 #include <M5StackUpdater.h>
 
 #define RELOAD_DELAY_SECONDS  60

@@ -32,7 +32,7 @@ void TextClock::draw_minimum() {
   RTC_TimeTypeDef   time;
   RTC_DateTypeDef   date;
   char              buffer[32];
-  bool              pm = false;
+  static bool       pm = false;
   bool              minute_changed = false;
   bool              second_changed = false;
 

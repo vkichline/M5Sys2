@@ -71,7 +71,7 @@ void M5Sys2::_check_for_reload() {
   uint32_t        time;
 
   M5.IMU.getAccelData(&dummy, &dummy, &z);
-  INFO("Reload: %s\n", (z < -0.9) ? " true" : "false");
+  DEBUG("Reload: %s\n", (z < -0.9) ? " true" : "false");
   // If the M5Stick Core2 is laying face down when reset:
   if(z < -0.9) {
     // DRY: If face down & rebooted, only do it once, not continually

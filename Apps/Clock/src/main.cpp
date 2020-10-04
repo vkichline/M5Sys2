@@ -5,6 +5,7 @@
 #include "TextClock.h"
 #include "WallClock.h"
 
+#define  MILLIS_UNTIL_SYNC            86400000    // One day in milliseconds
 
 const ColorCombo    colors[]          = { {WHITE, 0x0004}, {RED, BLACK}, {BLACK, WHITE} };
 const uint8_t       num_colors        = sizeof(colors) / sizeof(ColorCombo);
@@ -15,12 +16,15 @@ uint8_t             num_renderers     = sizeof(renderers) / sizeof(BaseRenderer*
 uint8_t             cur_renderer      = 0;
 String              button_string     = "color # back | home # design";
 unsigned long       show_time         = 0;
+bool                synced            = false;    // True after ezTime sync
+unsigned long       last_millis       = 0;        // Millis of last synchronization
 
 
 // Set the colors, timezone (if synchronized).
 // Call this every time settings are changed.
 //
 void use_settings() {
+  VERBOSE("use_settings()\n");
   ez.buttons.show("");
   ez.screen.clear(colors[cur_color].bg_color);
   ez.buttons.show(button_string);
@@ -99,15 +103,58 @@ void check_for_buttons() {
 }
 
 
+// Check to see if the clock needs to by sync'd with NTP.
+// That is: upon startup when ntp status is valid, and once
+// a day thereafter.
+//
+void check_for_sync() {
+  VERBOSE("check_for_sync()\n");
+  if(!synced) {
+    timeStatus_t status = timeStatus();
+    if(timeSet == status) {
+      // Let's sync with ntp!
+      ez.clock.tz.now();
+      RTC_TimeTypeDef td;
+      td.Hours    = ez.clock.tz.hour(LAST_READ);
+      td.Minutes  = ez.clock.tz.minute(LAST_READ);
+      td.Seconds  = ez.clock.tz.second(LAST_READ);
+      M5.Rtc.SetTime(&td);
+
+      RTC_DateTypeDef dd;
+      dd.Date     = ez.clock.tz.day(LAST_READ);
+      dd.Month    = ez.clock.tz.month(LAST_READ);
+      dd.Year     = ez.clock.tz.year(LAST_READ);
+      dd.WeekDay  = ez.clock.tz.weekday(LAST_READ) - 1;   // NOTE: One based to zero based conversion
+      M5.Rtc.SetData(&dd);
+
+      last_millis = millis();
+      synced    = true;
+      INFO("Setting ntp time: %d:%02d:%02d %d/%d/%d, %d\n", ez.clock.tz.hour(LAST_READ), ez.clock.tz.minute(LAST_READ),
+            ez.clock.tz.second(LAST_READ), ez.clock.tz.month(LAST_READ), ez.clock.tz.day(LAST_READ),
+            ez.clock.tz.year(LAST_READ), ez.clock.tz.weekday(LAST_READ)-1);
+    }
+  }
+  else {
+    unsigned long ms = millis();
+    if(last_millis + MILLIS_UNTIL_SYNC < ms) {
+      synced = false;
+      INFO("Invalidating synchronization after %ld milliseconds\n", ms - last_millis);
+    }
+  }
+}
+
+
 void setup() {
   sys.begin("Clock");
   M5.Lcd.setTextFont(2);
   M5.Lcd.setTextSize(1);
   use_settings();
+  synced = false;
 }
 
 
 void loop() {
+  check_for_sync();
   check_for_buttons();
   renderers[cur_renderer]->draw_minimum();
   delay(250); // Call more than once per second for higher precision

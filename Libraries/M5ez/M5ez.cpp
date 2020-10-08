@@ -355,7 +355,6 @@ uint16_t ezCanvas::loop() {
 			if (_printed[n].y >= 0) clean_copy.push_back(_printed[n]);
 		}
 		_printed = clean_copy;
-		Serial.println(ESP.getFreeHeap());
 	}
 	return 10;
 }

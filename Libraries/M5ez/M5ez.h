@@ -46,6 +46,7 @@
 #define FEATURE_INSTALL_EZCLOCK			// Enable built-in feature ezClock
 #define FEATURE_INSTALL_EZBATTERY		// Enable built-in feature ezBattery
 #define FEATURE_INSTALL_EZBLE			// Enable built-in feature ezBLE
+#define FEATURE_INSTALL_LOCATION		// Enable built-in feature ezLocation
 
 // For compatability defines in M5ez object
 #ifdef FEATURE_INSTALL_EZWIFI
@@ -65,6 +66,9 @@
 #endif
 #ifdef FEATURE_INSTALL_EZBLE
 	class ezBLE;
+#endif
+#ifdef FEATURE_INSTALL_LOCATION
+	class ezLocation;
 #endif
 
 
@@ -538,6 +542,9 @@ class M5ez {
 		#ifdef FEATURE_INSTALL_EZBLE
 			static ezBLE ble;
 		#endif
+		#ifdef FEATURE_INSTALL_LOCATION
+			static ezLocation location;
+		#endif
 
 	private:
 		static bool _begun;
@@ -579,6 +586,9 @@ class M5ez {
 #endif
 #ifdef FEATURE_INSTALL_EZBLE
 	#include "features/ezBLE/ezBLE.h"
+#endif
+#ifdef FEATURE_INSTALL_LOCATION
+	#include "features/ezLocation/ezLocation.h"
 #endif
 
 

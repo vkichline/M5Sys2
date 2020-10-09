@@ -732,6 +732,9 @@ std::vector<feature_t> M5ez::features = {
 #ifdef FEATURE_INSTALL_EZBLE
 	{"ezBLE", ezBLE::entry},
 #endif
+#ifdef FEATURE_INSTALL_LOCATION
+	{"ezLocation", ezLocation::entry},
+#endif
 };
 
 // Compatability initialization
@@ -752,6 +755,9 @@ std::vector<feature_t> M5ez::features = {
 #endif
 #ifdef FEATURE_INSTALL_EZBLE
 	ezBLE M5ez::ble;
+#endif
+#ifdef FEATURE_INSTALL_LOCATION
+	ezLocation M5ez::location;
 #endif
 
 

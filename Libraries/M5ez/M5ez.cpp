@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <Preferences.h>
 #include <M5ez.h>
+#include <GDTouchKeyboard.h>
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -765,6 +766,7 @@ void M5ez::begin() {
 	ezTheme::begin();
 	ez.screen.begin();
 	ez.settings.begin();
+	GDTK.setIdle( ez.yield);
 	_begun = true;
 }
 
@@ -870,64 +872,64 @@ String M5ez::msgBox(String header, String msg, String buttons /* = "OK" */, cons
 // ez.textInput
 
 String M5ez::textInput(String header /* = "" */, String defaultText /* = "" */) {
+	return GDTK.run();
+	// int16_t current_kb = 0, prev_kb = 0, locked_kb = 0;
+	// if(ez.tell("ezFACES", FEATURE_MSG_QUERY_ENABLED)) {
+	// 	current_kb = locked_kb = prev_kb = ez.theme->input_faces_btns;
+	// 	ez.tell("ezFACES", FEATURE_MSG_FACES_POLL);	// flush key buffer in FACES
+	// }
+	// String tmpstr;
+	// String text = defaultText;
+	// ez.screen.clear();
+	// if (header != "") ez.header.show(header);
+	// _drawTextInputBox(text);
+	// String key;
+	// ez.buttons.show(_keydefs[current_kb]);
 
-	int16_t current_kb = 0, prev_kb = 0, locked_kb = 0;
-	if(ez.tell("ezFACES", FEATURE_MSG_QUERY_ENABLED)) {
-		current_kb = locked_kb = prev_kb = ez.theme->input_faces_btns;
-		ez.tell("ezFACES", FEATURE_MSG_FACES_POLL);	// flush key buffer in FACES
-	}
-	String tmpstr;
-	String text = defaultText;
-	ez.screen.clear();
-	if (header != "") ez.header.show(header);
-	_drawTextInputBox(text);
-	String key;
-	ez.buttons.show(_keydefs[current_kb]);
-
-	while (true) {
-		key = ez.buttons.poll();
-		if(ez.tell("ezFACES", FEATURE_MSG_QUERY_ENABLED)) {
-			ez.tell("ezFACES", FEATURE_MSG_FACES_POLL, (void*)&key);
-		}
-		if (key == "Done" || key == (String)char(13)) return text;
-		if (key.substring(0, 2) == "KB") {
-			prev_kb = current_kb;
-			tmpstr = key.substring(2);
-			current_kb = tmpstr.toInt();
-			ez.buttons.show(_keydefs[current_kb]);
-			key = "";
-		}
-		if (key.substring(0, 4) == "LCK:") {
-			if (locked_kb != current_kb) {
-				_drawTextInputLockString( key.substring(4) );
-				locked_kb = current_kb;
-			} else {
-				_drawTextInputLockString( "" );
-				locked_kb = 0;
-				current_kb = 0;
-				ez.buttons.show(_keydefs[current_kb]);
-			}
-			key = "";
-		}
-		if (key == "Back") {
-			current_kb = prev_kb;
-			ez.buttons.show(_keydefs[current_kb]);
-			key = "";
-		}
-		if (key == "Del" || key == (String)char(8) || key == (String)char(127)) {
-			text = text.substring(0, text.length() - 1);
-			_drawTextInputBox(text);
-			key = "";
-		}
-		if (key == "SP") key = " ";
-		if (key >= " " && key <= "~") {
-			current_kb = locked_kb;
-			ez.buttons.show(_keydefs[current_kb]);
-			text += key;
-			_drawTextInputBox(text);
-		}
-		_textCursor();
-	}
+	// while (true) {
+	// 	key = ez.buttons.poll();
+	// 	if(ez.tell("ezFACES", FEATURE_MSG_QUERY_ENABLED)) {
+	// 		ez.tell("ezFACES", FEATURE_MSG_FACES_POLL, (void*)&key);
+	// 	}
+	// 	if (key == "Done" || key == (String)char(13)) return text;
+	// 	if (key.substring(0, 2) == "KB") {
+	// 		prev_kb = current_kb;
+	// 		tmpstr = key.substring(2);
+	// 		current_kb = tmpstr.toInt();
+	// 		ez.buttons.show(_keydefs[current_kb]);
+	// 		key = "";
+	// 	}
+	// 	if (key.substring(0, 4) == "LCK:") {
+	// 		if (locked_kb != current_kb) {
+	// 			_drawTextInputLockString( key.substring(4) );
+	// 			locked_kb = current_kb;
+	// 		} else {
+	// 			_drawTextInputLockString( "" );
+	// 			locked_kb = 0;
+	// 			current_kb = 0;
+	// 			ez.buttons.show(_keydefs[current_kb]);
+	// 		}
+	// 		key = "";
+	// 	}
+	// 	if (key == "Back") {
+	// 		current_kb = prev_kb;
+	// 		ez.buttons.show(_keydefs[current_kb]);
+	// 		key = "";
+	// 	}
+	// 	if (key == "Del" || key == (String)char(8) || key == (String)char(127)) {
+	// 		text = text.substring(0, text.length() - 1);
+	// 		_drawTextInputBox(text);
+	// 		key = "";
+	// 	}
+	// 	if (key == "SP") key = " ";
+	// 	if (key >= " " && key <= "~") {
+	// 		current_kb = locked_kb;
+	// 		ez.buttons.show(_keydefs[current_kb]);
+	// 		text += key;
+	// 		_drawTextInputBox(text);
+	// 	}
+	// 	_textCursor();
+	// }
 }
 
 void M5ez::_drawTextInputLockString(String text) {

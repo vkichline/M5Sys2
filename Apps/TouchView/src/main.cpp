@@ -1,4 +1,4 @@
-#include <M5Core2.h>
+#include <M5Sys2.h>
 
 // Display all the touch event on the M5Core2 screen.
 // Press the A button to turn on/off E_MOVE event detection
@@ -101,7 +101,7 @@ void setupGestures() {
 
 
 void setup() {
-  M5.begin();
+  sys.begin("TouchView");
   setup_disp();
   splash_screen();
   setup_events();

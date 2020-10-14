@@ -772,7 +772,6 @@ void M5ez::begin() {
 	ezTheme::begin();
 	ez.screen.begin();
 	ez.settings.begin();
-	GDTK.setIdle( ez.yield);
 	_begun = true;
 }
 

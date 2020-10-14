@@ -11,10 +11,11 @@ class GDTouchKeyboard
 public:
   GDTouchKeyboard();
   ~GDTouchKeyboard();
-  void setIdle(void(*idle)(void));
-  String run(String text = "");
+
+  String  run(String text = "");
+  void    setIdle(void(*idle)(void));
 private:
-  void (*idle)(void);
+  void    (*idle)(void);
 };
 
 extern GDTouchKeyboard GDTK;

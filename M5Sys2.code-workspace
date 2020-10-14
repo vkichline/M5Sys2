@@ -22,6 +22,14 @@
         {
             "name": "SoundMon",
             "path": "Apps\\SoundMon"
+        },
+        {
+            "name": "TouchGoal",
+            "path": "Apps\\TouchGoal"
+        },
+        {
+            "name": "TouchView",
+            "path": "Apps\\TouchView"
         }
     ],
     "settings": {

@@ -45,7 +45,7 @@ void ezWifi::begin() {
 	WiFi.mode(WIFI_MODE_STA);
 	WiFi.setAutoConnect(false);		// We have our own multi-AP version of this
 	WiFi.setAutoReconnect(false);	// So we turn off the ESP32's versions
-	WiFi.setHostname("M5Stack");
+	WiFi.setHostname("M5Core2");
 	readFlash();
 	_state = EZWIFI_IDLE;
 	const uint8_t cutoffs[] = { 0, 20, 40, 70 };

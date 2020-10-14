@@ -71,15 +71,10 @@ static void _drawKeyboard(void);
 
 GDTouchKeyboard::GDTouchKeyboard()
 {
-  idle = nullptr;
 }
 
 GDTouchKeyboard::~GDTouchKeyboard()
 {
-}
-
-void GDTouchKeyboard::setIdle(void(*idle)(void)) {
-  this->idle = idle;
 }
 
 String GDTouchKeyboard::run(String text)
@@ -89,7 +84,7 @@ String GDTouchKeyboard::run(String text)
   _keyboard_done = false;
   while(_keyboard_done == false)
   {
-    if(idle) idle(); else M5.update();
+    M5.update();
 
     // Blinking cursor
     if(millis() > _cursor_last)
@@ -101,7 +96,7 @@ String GDTouchKeyboard::run(String text)
   }
   while(M5.BtnB.isPressed())
   {
-    if(idle) idle(); else M5.update();
+    M5.update();
   }
   _deinitKeyboard();
   return _input_text;
@@ -156,8 +151,8 @@ static void _initKeyboard(String text)
     }
   }
 
-  M5.Events.addHandler(_buttonEvent, E_TOUCH + E_BTNONLY);
-  M5.Events.addHandler(_btnAEvent, E_RELEASE + E_BTNONLY);
+  M5.Buttons.addHandler(_buttonEvent, E_TOUCH);
+  M5.Buttons.addHandler(_btnAEvent, E_RELEASE);
 
   _input_text = text;
   _key_mode = KEY_MODE_LETTER;
@@ -166,8 +161,8 @@ static void _initKeyboard(String text)
 
 static void _deinitKeyboard()
 {
-  M5.Events.delHandlers(_buttonEvent, nullptr, nullptr);
-  M5.Events.delHandlers(_btnAEvent, nullptr, nullptr);
+  M5.Buttons.delHandlers(_buttonEvent, nullptr, nullptr);
+  M5.Buttons.delHandlers(_btnAEvent, nullptr, nullptr);
 
   for(int r = 0; r < ROWS; r++)
   {
@@ -265,15 +260,20 @@ static void _buttonEvent(Event& e)
     _drawKeyboard();
     return;
   }
+  else if(e.button == &M5.background)
+  {
+    // Ignore default background button
+    return;
+  }
   else
   {
-    if(String(b.label) == "shft")
+    if(String(b.label()) == "shft")
     {
       _shift_mode = !_shift_mode;
       _drawKeyboard();
       return;
     }
-    _input_text += b.label;
+    _input_text += b.label();
   }
   _updateInputText();
 }

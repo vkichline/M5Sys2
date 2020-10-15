@@ -17,12 +17,12 @@ typedef struct {
 } i2sQueueMsg_t;
 
 
-static QueueHandle_t  fftvalueQueue     = nullptr;
-static QueueHandle_t  i2sstateQueue     = nullptr;
-TFT_eSprite           DisFFTbuff        = TFT_eSprite(&M5.Lcd);
+static QueueHandle_t  fft_value_queue     = nullptr;
+static QueueHandle_t  i2s_state_queue     = nullptr;
+TFT_eSprite           disp_fft_buff        = TFT_eSprite(&M5.Lcd);
 
 
-bool InitI2SSpeakerOrMic(int mode) {
+bool init_i2s_speaker_or_mic(int mode) {
     esp_err_t err = ESP_OK;
 
     i2s_driver_uninstall(SPEAKER_I2S_NUMBER);
@@ -59,7 +59,7 @@ bool InitI2SSpeakerOrMic(int mode) {
 }
 
 
-static void i2sMicroFFTtask(void *arg) {
+static void i2s_micro_fft_task(void *arg) {
     uint8_t   FFTDataBuff[128];
     uint8_t   FFTValueBuff[24];
     uint8_t*  microRawData              = (uint8_t*)calloc(2048,sizeof(uint8_t));
@@ -73,15 +73,15 @@ static void i2sMicroFFTtask(void *arg) {
     uint8_t state = MODE_MIC;
     i2sQueueMsg_t QueueMsg;
     while(true) {
-        if(xQueueReceive(i2sstateQueue, &QueueMsg, (TickType_t)0) == pdTRUE) {
+        if(xQueueReceive(i2s_state_queue, &QueueMsg, (TickType_t)0) == pdTRUE) {
             //Serial.println("Queue Now");
             if(QueueMsg.state == MODE_MIC) {
-                InitI2SSpeakerOrMic(MODE_MIC);
+                init_i2s_speaker_or_mic(MODE_MIC);
                 state = MODE_MIC;
             }
             else {
                 //Serial.printf("Length:%d",QueueMsg.audioSize);
-                InitI2SSpeakerOrMic(MODE_SPK);
+                init_i2s_speaker_or_mic(MODE_SPK);
                 size_t written = 0;
                 i2s_write(SPEAKER_I2S_NUMBER, (unsigned char*)QueueMsg.audioPtr, QueueMsg.audioSize, &written, portMAX_DELAY);
                 state = MODE_SPK;
@@ -116,7 +116,7 @@ static void i2sMicroFFTtask(void *arg) {
                 subData /= 5;
                 FFTValueBuff[count] = map(subData, 0, 255, 0, 8);
             }
-            xQueueSend(fftvalueQueue, (void*)&FFTValueBuff, 0);
+            xQueueSend(fft_value_queue, (void*)&FFTValueBuff, 0);
             fft_destroy(real_fft_plan);
             //Serial.printf("mmp\r\n");
         }
@@ -127,12 +127,12 @@ static void i2sMicroFFTtask(void *arg) {
 }
 
 
-void MicroPhoneFFT() {
+void microphone_fft() {
     uint8_t FFTValueBuff[24];
-    xQueueReceive(fftvalueQueue, (void*)&FFTValueBuff, portMAX_DELAY);
-    DisFFTbuff.fillRect(0, 0, 312, 128, BLACK);
-    uint32_t colorY = DisFFTbuff.color565(0xff, 0x9c, 0x00);
-    uint32_t colorG = DisFFTbuff.color565(0x66, 0xff, 0x00);
+    xQueueReceive(fft_value_queue, (void*)&FFTValueBuff, portMAX_DELAY);
+    disp_fft_buff.fillRect(0, 0, 312, 128, BLACK);
+    uint32_t colorY = disp_fft_buff.color565(0xff, 0x9c, 0x00);
+    uint32_t colorG = disp_fft_buff.color565(0x66, 0xff, 0x00);
     uint32_t colorRect;
     for(int x = 0; x < 24; x++) {
         for( int y = 0; y < 9; y++) {
@@ -145,23 +145,23 @@ void MicroPhoneFFT() {
             else {
                 continue;
             }
-            DisFFTbuff.fillRect(x * 13, 128 - y * 13 - 13, 11, 11, colorRect);
+            disp_fft_buff.fillRect(x * 13, 128 - y * 13 - 13, 11, 11, colorRect);
         }
     }
-    DisFFTbuff.pushSprite(4, 92);
+    disp_fft_buff.pushSprite(4, 92);
 }
 
 
-void microPhoneSetup() {
-    fftvalueQueue = xQueueCreate(5, 24 * sizeof(uint8_t));
-    if( fftvalueQueue == 0 ) return;
+void microphone_setup() {
+    fft_value_queue = xQueueCreate(5, 24 * sizeof(uint8_t));
+    if( fft_value_queue == 0 ) return;
 
-    i2sstateQueue = xQueueCreate(5, sizeof(i2sQueueMsg_t));
-    if( i2sstateQueue == 0 ) return;
+    i2s_state_queue = xQueueCreate(5, sizeof(i2sQueueMsg_t));
+    if( i2s_state_queue == 0 ) return;
 
-    InitI2SSpeakerOrMic(MODE_MIC);
-    xTaskCreatePinnedToCore(i2sMicroFFTtask, "microPhoneTask", 4096, NULL, 3, NULL, 0);
-    DisFFTbuff.createSprite(312, 128);
+    init_i2s_speaker_or_mic(MODE_MIC);
+    xTaskCreatePinnedToCore(i2s_micro_fft_task, "microPhoneTask", 4096, NULL, 3, NULL, 0);
+    disp_fft_buff.createSprite(312, 128);
 }
 
 
@@ -170,12 +170,12 @@ void setup() {
   M5.Lcd.setTextFont(2);
   M5.Lcd.setTextSize(1);
   M5.Axp.SetSpkEnable(false);
-  InitI2SSpeakerOrMic(MODE_MIC);
-  microPhoneSetup();
+  init_i2s_speaker_or_mic(MODE_MIC);
+  microphone_setup();
 }
 
 
 void loop() {
-  MicroPhoneFFT();
+  microphone_fft();
   delay(5);
 }

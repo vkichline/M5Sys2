@@ -2,10 +2,10 @@
 
 #include <M5Sys2.h>
 #include <driver/i2s.h>
-#include "fft.h"
+#include <fft.h>
 #include <Fonts/EVA_20px.h>
 #include <Fonts/EVA_11px.h>
-#include <line3D.h>
+#include <Line3D.h>
 #include <WiFi.h>
 
 typedef struct i2cDevice {
@@ -49,17 +49,17 @@ typedef struct systemState {
   bool            soundFlag               = false;
 } systemState;
 
-extern const unsigned char CoverImage[21301];
+extern const unsigned char coverImage[21301];
 extern const unsigned char clockImage[18401];
-extern const unsigned char CoreMainImage[87169];
+extern const unsigned char coreMainImage[87169];
 extern const unsigned char batPowerImage[13769];
 extern const unsigned char touchImage[12262];
-extern const unsigned char SDCardImage[14835];
+extern const unsigned char sdCardImage[14835];
 extern const unsigned char imageMenu[14900];
 extern const unsigned char previewR[120264];
 extern const unsigned char wifiScanImage[28123];
-extern const unsigned char TimerAppImage[59165];
-extern const unsigned char SettingAppImage[50683];
+extern const unsigned char timerAppImage[59165];
+extern const unsigned char settingAppImage[50771];
 extern const unsigned char bibiSig[8820];
 
 extern const unsigned char image_rect_0006[1394];
@@ -114,8 +114,8 @@ extern const unsigned char image_number8x7_10[35];
 extern const unsigned char image_number8x7_11[35];
 extern const unsigned char image_number8x7_12[35];
 extern const unsigned char image_number8x7_13[35];
-extern const unsigned char image_number8x7_14[35];
-extern const unsigned char image_number8x7_15[35];
+extern const unsigned char image_number8x7_14[15];
+extern const unsigned char image_number8x7_15[300];
 extern const unsigned char image_number8x7_16[35];
 
 extern const unsigned char image_changing_0001[149];
@@ -140,8 +140,8 @@ extern const unsigned char image_TouchFish_0006[1672];
 
 extern const unsigned char image_External[1425];
 extern const unsigned char image_Internal[1425];
-extern const unsigned char image_PowerC[310];
 extern const unsigned char image_power[924];
+extern const unsigned char image_PowerC[310];
 
 uint8_t *rectptrBuff[6] = {
   (uint8_t*)image_rect_0001,

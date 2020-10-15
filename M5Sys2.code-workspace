@@ -30,6 +30,10 @@
         {
             "name": "TouchView",
             "path": "Apps\\TouchView"
+        },
+        {
+            "name": "FactoryTest",
+            "path": "Apps\\FactoryTest"
         }
     ],
     "settings": {

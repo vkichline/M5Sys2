@@ -31,10 +31,10 @@ TFT_eSprite DisCoverScrollbuff            = TFT_eSprite(&M5.Lcd);
 TFT_eSprite menubuff                      = TFT_eSprite(&M5.Lcd);
 
 line_3d_t rect[12] = {
-  {.start_point    = {-1, -1, 1}, .end_point = {1, -1, 1}},
-  {.start_point    = {1, -1, 1}, .end_point = {1, 1, 1}},
-  {.start_point    = {1, 1, 1}, .end_point = {-1, 1, 1}},
-  {.start_point    = {-1, 1, 1}, .end_point = {-1, -1, 1}},
+  {.start_point    = {-1, -1, 1}, .end_point = { 1, -1, 1} },
+  {.start_point    = { 1, -1, 1}, .end_point = { 1,  1, 1} },
+  {.start_point    = { 1,  1, 1}, .end_point = {-1,  1, 1} },
+  {.start_point    = {-1,  1, 1}, .end_point = {-1, -1, 1} },
   {
     .start_point   = {-1, -1, 1},
     .end_point     = {-1, -1, -1},
@@ -134,7 +134,7 @@ void CoverScrollText(String strNext, uint32_t color) {
 
 
 void sysErrorSkip() {
-  uint32_t bkColor16 = Disbuff.color565(0x22,0x22,0x22); 
+  uint32_t bkColor16 = Disbuff.color565(0x22,0x22,0x22);
   Disbuff.setFreeFont(&EVA_20px);
   Disbuff.setTextSize(1);
   Disbuff.setTextColor(Disbuff.color565(0xff,0,0),bkColor16);
@@ -159,7 +159,7 @@ void addI2cDevice(String name, uint8_t addr ) {
   i2cDevice_t *lastptr = &i2cParentptr;
 
   while(lastptr->nextPtr != nullptr ) {
-      lastptr = lastptr->nextPtr;
+    lastptr = lastptr->nextPtr;
   }
   i2cDevice_t* ptr = ( i2cDevice_t * )calloc(1,sizeof(i2cDevice_t));
   ptr->name = name;
@@ -182,8 +182,8 @@ int scani2caddr() {
 
 
 int checkPsram() {
-  uint8_t* testbuff = ( uint8_t* )ps_calloc( 100*1024 ,sizeof(uint8_t));
-  if( testbuff == nullptr ) {
+  uint8_t* testbuff = ( uint8_t* )ps_calloc( 100 * 1024 , sizeof(uint8_t));
+  if(testbuff == nullptr) {
     CoverScrollText("PSRAM malloc failed",M5.Lcd.color565(FAILED_COLOR));
     sysErrorSkip();
     return -1;
@@ -193,9 +193,9 @@ int checkPsram() {
   }
   delay(100);
 
-  for( size_t i = 0; i < 102400; i++ ) {
+  for(size_t i = 0; i < 102400; i++) {
     testbuff[i] = 0xA5;
-    if( testbuff[i] != 0xA5 )
+    if(testbuff[i] != 0xA5)
     {
       CoverScrollText("PSRAM read failed",M5.Lcd.color565(FAILED_COLOR));
       sysErrorSkip();
@@ -318,8 +318,8 @@ void setup3D() {
 
 
 void Polar2Cartesian(double Angle, double radius, point_2d_t *point, int16_t offsetX = 42, int16_t officeY = 28) {
-    point->x = radius * cos( Angle ) + offsetX;
-    point->y = officeY - radius * sin( Angle );
+  point->x = radius * cos( Angle ) + offsetX;
+  point->y = officeY - radius * sin( Angle );
 }
 
 
@@ -536,8 +536,8 @@ void batpowerFlush() {
   DisBatbuff.drawRect(29, 17, 31, 15, colorY);
 
   if( M5.Axp.isACIN()) {
-      sysState.batCount ++;
-      sysState.batCount %= 7;
+    sysState.batCount ++;
+    sysState.batCount %= 7;
   }
 
   DisBatbuff.drawColorBitmap(31, 19, 27, 11, batRect[sysState.batCount], 0xff9c00, 0x000000);
@@ -557,7 +557,7 @@ void batpowerFlush() {
     for( int i = 0; i < 11; i++ ) {
       int lim = sysState.batVoltageBuff[(sysState.batVoltageReadptr + i) % 15 ];
       for(int y = 0; y < lim; y++) {
-          DisBatbuff.fillRect(6 + i * 5 ,74 - y * 5,4,4,colorY);
+        DisBatbuff.fillRect(6 + i * 5 ,74 - y * 5,4,4,colorY);
       }
     }
   }
@@ -578,13 +578,13 @@ void touchsetup() {
   DisTouchbuff.drawColorBitmap(12, 26, 7, 10, (uint8_t*)Number_7x10px[12], 0xff9c00, 0x000000);
   DisTouchbuff.drawColorBitmap(19, 26, 3, 10, (uint8_t*)Number_7x10px[13], 0xff9c00, 0x000000);
   for( int i = 0; i < 3; i++ ) {
-      int number = (0 / (int)(pow( 10 , ( 2 - i )))) % 10;
-      DisTouchbuff.drawColorBitmap(22 + i * 7, 15, 7, 10, (uint8_t*)Number_7x10px[number], 0xff9c00, 0x000000);
+    int number = (0 / (int)(pow( 10 , ( 2 - i )))) % 10;
+    DisTouchbuff.drawColorBitmap(22 + i * 7, 15, 7, 10, (uint8_t*)Number_7x10px[number], 0xff9c00, 0x000000);
   }
 
   for( int i = 0; i < 3; i++ ) {
-      int number = ( 0 /  (int)( pow( 10 , ( 2 - i )))) % 10;
-      DisTouchbuff.drawColorBitmap(22 + i * 7, 26, 7, 10, (uint8_t*)Number_7x10px[number], 0xff9c00, 0x000000);
+    int number = ( 0 /  (int)( pow( 10 , ( 2 - i )))) % 10;
+    DisTouchbuff.drawColorBitmap(22 + i * 7, 26, 7, 10, (uint8_t*)Number_7x10px[number], 0xff9c00, 0x000000);
   }
   DisTouchbuff.fillRect( 5, 15,  5, 21, TFT_BLACK);
   DisTouchbuff.fillRect(46,  4, 15,  8, colorGREY);
@@ -605,16 +605,16 @@ void touchflush() {
   msg.audioSize = 8820;
 
   if(touchStateNow) {
-    if( sysState.touchState == false ) {
-      xQueueSend(i2sstateQueue,&msg,(TickType_t)100);
+    if(sysState.touchState == false) {
+      xQueueSend(i2sstateQueue, &msg, (TickType_t)100);
       msg.state = MODE_MIC;
-      xQueueSend(i2sstateQueue,&msg,(TickType_t)100);
+      xQueueSend(i2sstateQueue, &msg, (TickType_t)100);
     }
 
     uint32_t colorY    = DisTouchbuff.color565(0xff, 0x9c, 0x00);
     uint32_t colorG    = DisTouchbuff.color565(0x66, 0xff, 0x00);
     uint32_t colorGREY = DisTouchbuff.color565(0x30, 0x30, 0x30);
-    DisTouchbuff.fillRect(5,15,5,21,colorG);
+    DisTouchbuff.fillRect(5, 15, 5, 21, colorG);
 
     DisTouchbuff.drawColorBitmap(12, 15, 7, 10, (uint8_t*)Number_7x10px[11], 0xff9c00, 0x000000);
     DisTouchbuff.drawColorBitmap(19, 15, 3, 10, (uint8_t*)Number_7x10px[13], 0xff9c00, 0x000000);
@@ -625,8 +625,8 @@ void touchflush() {
       DisTouchbuff.drawColorBitmap(22 + i * 7, 15, 7, 10, (uint8_t*)Number_7x10px[number], 0xff9c00, 0x000000);
     }
     for( int i = 0; i < 3; i++ ) {
-        int number = (pos.y / (int)( pow( 10 , (2 - i )))) % 10;
-        DisTouchbuff.drawColorBitmap(22 + i * 7, 26, 7, 10, (uint8_t*)Number_7x10px[number], 0xff9c00, 0x000000);
+      int number = (pos.y / (int)( pow( 10 , (2 - i )))) % 10;
+      DisTouchbuff.drawColorBitmap(22 + i * 7, 26, 7, 10, (uint8_t*)Number_7x10px[number], 0xff9c00, 0x000000);
     }
 
     color = (touchBtn0.inHotZone(pos)) ? colorY : colorGREY;
@@ -666,20 +666,20 @@ void sdcardSetup() {
     DisSDCardbuff.fillRect(55,4,6,10,TFT_BLACK);
   }
   else {
-      sysState.SDCardState = true;
-      uint32_t colorY         = DisSDCardbuff.color565(0xff,0x9c,0x00);
-      uint64_t sdcardSize     = SD.cardSize() * 10 /1024 /1024/ 1024 ;
-      uint64_t sdcardFreeSize = (SD.cardSize() - SD.usedBytes()) * 10 / 1024 / 1024 / 1024 ;
+    sysState.SDCardState = true;
+    uint32_t colorY         = DisSDCardbuff.color565(0xff,0x9c,0x00);
+    uint64_t sdcardSize     = SD.cardSize() * 10 /1024 /1024/ 1024 ;
+    uint64_t sdcardFreeSize = (SD.cardSize() - SD.usedBytes()) * 10 / 1024 / 1024 / 1024 ;
 
-      DisSDCardbuff.fillRect(55, 4, 6, 10,colorY);
-      DisSDCardbuff.drawColorBitmap( 3, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardFreeSize /100 % 10], 0xff9c00, 0x000000);
-      DisSDCardbuff.drawColorBitmap(10, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardFreeSize /10 % 10 ], 0xff9c00, 0x000000);
-      DisSDCardbuff.drawColorBitmap(20, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardFreeSize % 10 ],     0xff9c00, 0x000000);
-      DisSDCardbuff.drawColorBitmap(33, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize / 100 % 10],    0xff9c00, 0x000000);
-      DisSDCardbuff.drawColorBitmap(40, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize / 10 % 10],     0xff9c00, 0x000000);
-      DisSDCardbuff.drawColorBitmap(50, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize % 10],          0xff9c00, 0x000000);
-      Serial.printf("SDCard Type = %d \r\n", Type);
-      Serial.printf("SDCard Size = %d \r\n", (int)(SD.cardSize() / 1024 / 1024));
+    DisSDCardbuff.fillRect(55, 4, 6, 10,colorY);
+    DisSDCardbuff.drawColorBitmap( 3, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardFreeSize /100 % 10], 0xff9c00, 0x000000);
+    DisSDCardbuff.drawColorBitmap(10, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardFreeSize /10 % 10 ], 0xff9c00, 0x000000);
+    DisSDCardbuff.drawColorBitmap(20, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardFreeSize % 10 ],     0xff9c00, 0x000000);
+    DisSDCardbuff.drawColorBitmap(33, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize / 100 % 10],    0xff9c00, 0x000000);
+    DisSDCardbuff.drawColorBitmap(40, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize / 10 % 10],     0xff9c00, 0x000000);
+    DisSDCardbuff.drawColorBitmap(50, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize % 10],          0xff9c00, 0x000000);
+    Serial.printf("SDCard Type = %d \r\n", Type);
+    Serial.printf("SDCard Size = %d \r\n", (int)(SD.cardSize() / 1024 / 1024));
   }
   DisSDCardbuff.pushSprite(3,4);
 }
@@ -692,26 +692,25 @@ void sdCardFlush() {
   sysState.SDCardscaneCount = 0;
 
   if(Type == CARD_UNKNOWN || Type == CARD_NONE) {
-      sysState.SDCardState = false;
-      DisSDCardbuff.fillRect(55, 4, 6, 10, TFT_BLACK);
+    sysState.SDCardState = false;
+    DisSDCardbuff.fillRect(55, 4, 6, 10, TFT_BLACK);
   }
-  else
-  {
-      sysState.SDCardState = true;
-      uint32_t colorY = DisSDCardbuff.color565(0xff, 0x9c, 0x00);
+  else {
+    sysState.SDCardState = true;
+    uint32_t colorY = DisSDCardbuff.color565(0xff, 0x9c, 0x00);
 
-      uint64_t sdcardSize     = SD.cardSize() * 10 / 1024 / 1024/ 1024 ;
-      uint64_t sdcardFreeSize = (SD.cardSize() - SD.usedBytes())* 10 / 1024 / 1024 / 1024 ;
+    uint64_t sdcardSize     = SD.cardSize() * 10 / 1024 / 1024/ 1024 ;
+    uint64_t sdcardFreeSize = (SD.cardSize() - SD.usedBytes())* 10 / 1024 / 1024 / 1024 ;
 
-      DisSDCardbuff.fillRect(55,4,6,10,colorY);
-      DisSDCardbuff.drawColorBitmap( 3, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardFreeSize / 100 % 10 ], 0xff9c00, 0x000000);
-      DisSDCardbuff.drawColorBitmap(10, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardFreeSize / 10 % 10 ],  0xff9c00, 0x000000);
-      DisSDCardbuff.drawColorBitmap(20, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardFreeSize % 10 ],       0xff9c00, 0x000000);
-      DisSDCardbuff.drawColorBitmap(33, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize / 100 % 10],      0xff9c00, 0x000000);
-      DisSDCardbuff.drawColorBitmap(40, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize / 10 % 10 ],      0xff9c00, 0x000000);
-      DisSDCardbuff.drawColorBitmap(50, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize % 10 ],           0xff9c00, 0x000000);
-      Serial.printf("SDCard Type = %d \r\n", Type);
-      Serial.printf("SDCard Size = %d \r\n", (int)(SD.cardSize() / 1024 / 1024));
+    DisSDCardbuff.fillRect(55,4,6,10,colorY);
+    DisSDCardbuff.drawColorBitmap( 3, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardFreeSize / 100 % 10 ], 0xff9c00, 0x000000);
+    DisSDCardbuff.drawColorBitmap(10, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardFreeSize / 10 % 10 ],  0xff9c00, 0x000000);
+    DisSDCardbuff.drawColorBitmap(20, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardFreeSize % 10 ],       0xff9c00, 0x000000);
+    DisSDCardbuff.drawColorBitmap(33, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize / 100 % 10],      0xff9c00, 0x000000);
+    DisSDCardbuff.drawColorBitmap(40, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize / 10 % 10 ],      0xff9c00, 0x000000);
+    DisSDCardbuff.drawColorBitmap(50, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize % 10 ],           0xff9c00, 0x000000);
+    Serial.printf("SDCard Type = %d \r\n", Type);
+    Serial.printf("SDCard Size = %d \r\n", (int)(SD.cardSize() / 1024 / 1024));
   }
   DisSDCardbuff.pushSprite(3,4);
 }
@@ -816,6 +815,7 @@ void drawJPEGImageFromSDCard(fs::FS &fs, const char *dirname) {
       Disbuff.pushSprite(0, 0);
     }
   }
+
 endImage:
   Disbuff.drawJpg(CoreMainImage, 87169, 0, 0, 320, 240, 0, 0);
   Disbuff.pushSprite(0, 0);
@@ -899,7 +899,7 @@ void AppWifi() {
       if(first) {
         for (int i = 0; i < WifiNumber; i++) {
             for(int n = 9; n >= 0; n-- ) {
-                Disbuff.fillRect(298 - 12 * n, 34 + i * 24 + 2, 8, 20, color_grey);
+              Disbuff.fillRect(298 - 12 * n, 34 + i * 24 + 2, 8, 20, color_grey);
             }
         }
         Disbuff.pushSprite(0,0);
@@ -911,10 +911,10 @@ void AppWifi() {
           uint16_t colorNow = color_yellow;
 
           if(rssi < ( n * -10)) {
-              colorNow = color_grey;
+            colorNow = color_grey;
           }
           else {
-              colorNow = colorWifiBar[9 - n];
+            colorNow = colorWifiBar[9 - n];
           }
           Disbuff.fillRect(298-12*n,34+i*24+2,8,20,colorNow);
         }
@@ -934,7 +934,7 @@ void AppWifi() {
 
     pos = M5.Touch.getPressPoint();
     if(pos.x != -1) {
-        if(escBtn.inHotZone(pos)) break;
+      if(escBtn.inHotZone(pos)) break;
     }
   }
   Disbuff.drawJpg(CoreMainImage, 87169, 0, 0, 320, 240, 0, 0);
@@ -943,398 +943,296 @@ void AppWifi() {
 }
 
 
-void AppTimer()
-{
+void AppTimer() {
     Disbuff.drawJpg(TimerAppImage,59165,0,0,320,240,0,0);
     Disbuff.pushSprite(0,0);
 
-    TouchPoint_t pos = M5.Touch.getPressPoint();
-
-    HotZone StopBtn(240,36,320,114);
-    HotZone CleanBtn(240,118,320,198);
-    HotZone SettingBtn(185,144,249,240);
-    HotZone EscBtn(240,200,320,280);
-
-    bool stopped = true;
-    bool zeroflag = false;
-    bool pressed = false;
-    uint16_t count_bibi = 0;
-
-    uint16_t posx[6] = { 4, 28, 66, 90, 127, 144 };
-
-    TFT_eSprite Timerbuff = TFT_eSprite(&M5.Lcd);
-    Timerbuff.createSprite(176,56);
-
-    TFT_eSprite TimerRectbuff = TFT_eSprite(&M5.Lcd);
-    TimerRectbuff.createSprite(40,164);
-    TimerRectbuff.fillRect(0,0,40,164,TFT_BLACK);
-
-    unsigned long timeNow = micros();
-    int64_t timeset = 65000;
-    int64_t timeSetting = timeset;
-    int min = timeSetting / 60000 % 60;
-    int sec = timeSetting / 1000 % 60;
-    int mill = timeSetting % 1000;
-    uint32_t colorNum = 0xff9c00;
-
-    uint16_t color16Yellow = Timerbuff.color565(0xff,0x9c,0);
-    uint16_t color16Red = Timerbuff.color565(255,0,0);
-    uint16_t color16green = Timerbuff.color565(0,255,0);
-    uint16_t color_grey = Disbuff.color565(0x43,0x43,0x43);
-
-    uint16_t colorBar[12] = {color16green,color16green,color16green,color16green,color16green,color16green,
-                             color16Yellow,color16Yellow,color16Yellow,color16Yellow,
-                             color16Red,color16Red};
-    uint16_t color16 = color16Yellow;
-
+    TouchPoint_t  pos           = M5.Touch.getPressPoint();
+    bool          stopped       = true;
+    bool          zeroflag      = false;
+    bool          pressed       = false;
+    uint16_t      posx[6]       = { 4, 28, 66, 90, 127, 144 };
+    uint16_t      count_bibi    = 0;
+    TFT_eSprite   Timerbuff     = TFT_eSprite(&M5.Lcd);
+    TFT_eSprite   TimerRectbuff = TFT_eSprite(&M5.Lcd);
+    unsigned long timeNow       = micros();
+    int64_t       timeset       = 65000;
+    int64_t       timeSetting   = timeset;
+    int           min           = timeSetting / 60000 % 60;
+    int           sec           = timeSetting / 1000 % 60;
+    int           mill          = timeSetting % 1000;
+    uint32_t      colorNum      = 0xff9c00;
+    uint16_t      color16Yellow = Timerbuff.color565(0xff, 0x9c,   0);
+    uint16_t      color16Red    = Timerbuff.color565(255,    0,    0);
+    uint16_t      color16green  = Timerbuff.color565(  0,  255,    0);
+    uint16_t      color_grey    = Disbuff.color565( 0x43, 0x43, 0x43);
+    uint16_t      color16       = color16Yellow;
     i2sQueueMsg_t msg;
+    uint16_t      colorBar[12]  = { color16green,  color16green,  color16green,  color16green,  color16green,  color16green,
+                                    color16Yellow, color16Yellow, color16Yellow, color16Yellow,
+                                    color16Red,    color16Red };
+    HotZone       StopBtn(240,36,320,114);
+    HotZone       CleanBtn(240,118,320,198);
+    HotZone       SettingBtn(185,144,249,240);
+    HotZone       EscBtn(240,200,320,280);
 
-    msg.state = MODE_SPK;
-    msg.audioPtr = (void*)bibiSig;
+    Timerbuff.createSprite(176, 56);
+    TimerRectbuff.createSprite(40, 164);
+    TimerRectbuff.fillRect(0, 0, 40, 164, TFT_BLACK);
+
+    msg.state     = MODE_SPK;
+    msg.audioPtr  = (void*)bibiSig;
     msg.audioSize = 8820;
 
-    //msg.state = MODE_SPK;
-    //msg.audioPtr = (void*)previewR;
-    //msg.audioSize = 120264;
-    //xQueueSend(i2sstateQueue,&msg,(TickType_t)portMAX_DELAY);
-                     
-    Timerbuff.fillRect(56,13, 5  , 5 , Timerbuff.color565(0xff, 0x9c, 0x00));
-    Timerbuff.fillRect(56,32, 5  , 5 , Timerbuff.color565(0xff, 0x9c, 0x00));
-
-    Timerbuff.fillRect(118,18, 5  , 5 , Timerbuff.color565(0xff, 0x9c, 0x00));
-    Timerbuff.fillRect(118,35, 5  , 5 , Timerbuff.color565(0xff, 0x9c, 0x00));
-    
-    TimerRectbuff.fillRect(0,0,40,164,TFT_BLACK);
-    for( int i = 0; i< 12; i++ )
-    {
-        TimerRectbuff.fillRect(0,154-i*14,30,10,colorBar[11-i]);
+    Timerbuff.fillRect( 56, 13, 5, 5, Timerbuff.color565(0xff, 0x9c, 0x00));
+    Timerbuff.fillRect( 56, 32, 5, 5, Timerbuff.color565(0xff, 0x9c, 0x00));
+    Timerbuff.fillRect(118, 18, 5, 5, Timerbuff.color565(0xff, 0x9c, 0x00));
+    Timerbuff.fillRect(118, 35, 5, 5, Timerbuff.color565(0xff, 0x9c, 0x00));
+    TimerRectbuff.fillRect(0, 0, 40, 164, TFT_BLACK);
+    for(int i = 0; i < 12; i++) {
+      TimerRectbuff.fillRect(0, 154 - i * 14, 30, 10, colorBar[11 - i]);
     }
-    TimerRectbuff.pushSprite(7,36);
+    TimerRectbuff.pushSprite(7, 36);
 
-    while(1)
-    {
-        if( !stopped )
-        {
-            timeSetting  = timeSetting - ( millis() - timeNow );
-            if( timeSetting <= 0 )
-            {
-                timeSetting = 0;
-                count_bibi = 0;
-                //M5.Axp.SetLDOEnable(3,true);
-                zeroflag = true;
-                stopped = true;
-            }
+    while(true) {
+      if(!stopped) {
+        timeSetting  = timeSetting - (millis() - timeNow);
+        if(timeSetting <= 0)  {
+          timeSetting   = 0;
+          count_bibi    = 0;
+          zeroflag      = true;
+          stopped       = true;
         }
-
-        if( zeroflag )
-        {
-            delay(10);
-            count_bibi ++;
-            if( count_bibi > 20 )
-            {
-                count_bibi = 0;
-
-                msg.state = MODE_SPK;
-                msg.audioPtr = (void*)bibiSig;
-                msg.audioSize = 8820;
-
-                xQueueSend(i2sstateQueue,&msg,(TickType_t)portMAX_DELAY);
-            }
-        }
-
-        int timerect = map(timeSetting,0,timeset,1,12);
-        TimerRectbuff.fillRect(0,0,40,164,TFT_BLACK);
-        for( int i = 0; i < 12; i++ )
-        {
-            if( i < timerect )
-                TimerRectbuff.fillRect(0,154-i*14,30,10,colorBar[11-i]);
-            else
-                TimerRectbuff.fillRect(0,154-i*14,30,10,color_grey);
-        }
-        TimerRectbuff.pushSprite(7,36);
-
-        timeNow = millis();
-
-        min = timeSetting / 60000 % 60;
-        sec = timeSetting / 1000 % 60;
-        mill = timeSetting / 10 % 100;
-        
-        colorNum = ( min == 0 ) ? 0xff0000 : 0xff9c00;
-        color16 = ( min == 0 ) ? color16Red : color16Yellow; 
-
-        Timerbuff.fillRect(56,13, 5  , 5 , color16);
-        Timerbuff.fillRect(56,32, 5  , 5 , color16);
-
-        Timerbuff.fillRect(118,18, 5  , 5 , color16);
-        Timerbuff.fillRect(118,35, 5  , 5 , color16);
-
-        Timerbuff.drawColorBitmap(posx[0],4,24,42,
-                            DigNumber[ min / 10],
-                            colorNum,
-                            0x000000);
-        Timerbuff.drawColorBitmap(posx[1],4,24,42,
-                            DigNumber[ min % 10],
-                            colorNum,
-                            0x000000);
-        Timerbuff.drawColorBitmap(posx[2],4,24,42,
-                            DigNumber[ sec / 10 ],
-                            colorNum,
-                            0x000000);
-        Timerbuff.drawColorBitmap(posx[3],4,24,42,
-                            DigNumber[ sec % 10 ],
-                            colorNum,
-                            0x000000);
-        Timerbuff.drawColorBitmap(posx[4],14,18,35,
-                            DigNumber_35px[ mill / 10 ],
-                            colorNum,
-                            0x000000);
-        Timerbuff.drawColorBitmap(posx[5],14,18,35,
-                            DigNumber_35px[ mill % 10 ],
-                            colorNum,
-                            0x000000);
-        Timerbuff.pushSprite(54,92);
-
-        pos = M5.Touch.getPressPoint();
-
-        if(( pos.x != -1 )&&( pressed == false ))
-        {
-            pressed = true;
-
-            msg.state = MODE_SPK;
-            msg.audioPtr = (void*)bibiSig;
+      }
+      if(zeroflag) {
+        delay(10);
+        count_bibi ++;
+        if(count_bibi     > 20) {
+            count_bibi    = 0;
+            msg.state     = MODE_SPK;
+            msg.audioPtr  = (void*)bibiSig;
             msg.audioSize = 8820;
-
             xQueueSend(i2sstateQueue,&msg,(TickType_t)portMAX_DELAY);
-
-            if( StopBtn.inHotZone(pos))
-            {
-                stopped = ( stopped == true ) ? false : true;
-            }
-
-            if( zeroflag )
-            {
-                zeroflag    = false;
-                timeSetting = timeset;
-                //M5.Axp.SetLDOEnable(3,false);
-            }
-
-            if( CleanBtn.inHotZone(pos))
-            {
-                timeSetting = timeset;
-                stopped     = true;
-
-                TimerRectbuff.fillRect(0,0,40,164,TFT_BLACK);
-                for( int i = 0; i< 12; i++ )
-                {
-                    TimerRectbuff.fillRect(0,154-i*14,30,10,colorBar[11-i]);
-                }
-                TimerRectbuff.pushSprite(7,36);
-            }
-
-            if( EscBtn.inHotZone(pos))
-            {
-                break;
-            }
         }
-        else if( pos.x == -1 )
-        {
-            pressed = false;
+      }
+
+      int timerect = map(timeSetting, 0, timeset, 1, 12);
+      TimerRectbuff.fillRect(0, 0, 40, 164, TFT_BLACK);
+      for(int i = 0; i < 12; i++) {
+        if( i < timerect )
+          TimerRectbuff.fillRect(0, 154 - i * 14, 30, 10, colorBar[11 - i]);
+        else
+          TimerRectbuff.fillRect(0, 154 - i * 14, 30, 10, color_grey);
+      }
+      TimerRectbuff.pushSprite(7, 36);
+
+      timeNow  = millis();
+      min      = timeSetting / 60000 % 60;
+      sec      = timeSetting / 1000 % 60;
+      mill     = timeSetting / 10 % 100;
+      colorNum = (min == 0) ? 0xff0000 : 0xff9c00;
+      color16  = (min == 0) ? color16Red : color16Yellow;
+
+      Timerbuff.fillRect( 56, 13, 5, 5, color16);
+      Timerbuff.fillRect( 56, 32, 5, 5, color16);
+      Timerbuff.fillRect(118, 18, 5, 5, color16);
+      Timerbuff.fillRect(118, 35, 5, 5, color16);
+
+      Timerbuff.drawColorBitmap(posx[0],  4, 24, 42, DigNumber[      min  / 10], colorNum, 0x000000);
+      Timerbuff.drawColorBitmap(posx[1],  4, 24, 42, DigNumber[      min  % 10], colorNum, 0x000000);
+      Timerbuff.drawColorBitmap(posx[2],  4, 24, 42, DigNumber[      sec  / 10], colorNum, 0x000000);
+      Timerbuff.drawColorBitmap(posx[3],  4, 24, 42, DigNumber[      sec  % 10], colorNum, 0x000000);
+      Timerbuff.drawColorBitmap(posx[4], 14, 18, 35, DigNumber_35px[ mill / 10], colorNum, 0x000000);
+      Timerbuff.drawColorBitmap(posx[5], 14, 18, 35, DigNumber_35px[ mill % 10], colorNum, 0x000000);
+      Timerbuff.pushSprite(54, 92);
+
+      pos = M5.Touch.getPressPoint();
+      if((pos.x != -1) && (pressed == false)) {
+        pressed         = true;
+        msg.state       = MODE_SPK;
+        msg.audioPtr    = (void*)bibiSig;
+        msg.audioSize   = 8820;
+
+        xQueueSend(i2sstateQueue, &msg, (TickType_t)portMAX_DELAY);
+
+        if( StopBtn.inHotZone(pos)) {
+          stopped = (stopped == true) ? false : true;
         }
+
+        if(zeroflag) {
+            zeroflag    = false;
+            timeSetting = timeset;
+        }
+
+        if(CleanBtn.inHotZone(pos)) {
+          timeSetting = timeset;
+          stopped     = true;
+
+          TimerRectbuff.fillRect(0,0,40,164,TFT_BLACK);
+          for(int i = 0; i< 12; i++) {
+              TimerRectbuff.fillRect(0, 154 - i * 14, 30, 10, colorBar[11 - i]);
+          }
+          TimerRectbuff.pushSprite(7, 36);
+        }
+
+        if(EscBtn.inHotZone(pos)) {
+          break;
+        }
+      }
+      else if(pos.x == -1) {
+        pressed = false;
+      }
     }
 
-    msg.state = MODE_MIC;
-    msg.audioPtr = (uint8_t*)previewR;
+    msg.state     = MODE_MIC;
+    msg.audioPtr  = (uint8_t*)previewR;
     msg.audioSize = 120264;
 
     xQueueSend(i2sstateQueue,&msg,(TickType_t)portMAX_DELAY);
 
     Timerbuff.deleteSprite();
-
-    Disbuff.drawJpg(CoreMainImage,87169,0,0,320,240,0,0);
-    Disbuff.pushSprite(0,0);
-
+    Disbuff.drawJpg(CoreMainImage, 87169, 0, 0, 320, 240, 0, 0);
+    Disbuff.pushSprite(0, 0);
     sysState.power = kPOWER_MAX;
 }
-void TFTTest()
-{
-    M5.Lcd.fillRect(0,0,320,240,TFT_RED);
+
+
+void TFTTest() {
+    M5.Lcd.fillRect(0, 0, 320, 240, TFT_RED);
     delay(1000);
-    M5.Lcd.fillRect(0,0,320,240,TFT_GREEN);
+    M5.Lcd.fillRect(0, 0, 320, 240, TFT_GREEN);
     delay(1000);
-    M5.Lcd.fillRect(0,0,320,240,TFT_BLUE);
+    M5.Lcd.fillRect(0, 0, 320, 240, TFT_BLUE);
     delay(1000);
-    Disbuff.pushSprite(0,0);
+    Disbuff.pushSprite(0, 0);
 }
-void AppSetting()
-{
-    //SettingAppImage
-    Disbuff.drawJpg(SettingAppImage,50683,0,0,320,240);
 
 
-    HotZone IOBtn(7,99,104,154);
-    HotZone MotorBtn(113,99,210,154);
+void AppSetting() {
+  i2sQueueMsg_t msg;
+  HotZone       IOBtn   (  7,  99, 104, 154);
+  HotZone       MotorBtn(113,  99, 210, 154);
+  HotZone       TFTBtn  (  7, 161, 104, 216);
+  HotZone       SoundBtn(113, 161, 210, 216);
+  HotZone       EscBtn  (240, 200, 320, 280);
+  TouchPoint_t  pos           = M5.Touch.getPressPoint();
+  bool          pressed       = false;
+  uint8_t       IOState       = 0;
+  uint8_t       MotorState    = 1;
+  uint8_t       ioBuff[6]     = {14,13,32,33,19,27};
+  uint16_t      adcReadCount  = 0;
+  uint8_t       iostatebuff[4][6] = {
+      {1, 1, 1, 1, 1, 1},
+      {0, 1, 0, 1, 0, 1},
+      {1, 0, 1, 0, 1, 0},
+      {0, 0, 0, 0, 0, 0},
+  };
 
-    HotZone TFTBtn(7,161,104,216);
-    HotZone SoundBtn(113,161,210,216);
+  Disbuff.drawJpg(SettingAppImage, 50683, 0, 0, 320, 240); //SettingAppImage
+  msg.state     = MODE_SPK;
+  msg.audioPtr  = (void*)bibiSig;
+  msg.audioSize = 8820;
+  pinMode(14, OUTPUT);
+  pinMode(13, OUTPUT);
+  pinMode(32, OUTPUT);
+  pinMode(33, OUTPUT);
+  pinMode(19, OUTPUT);
+  pinMode(27, OUTPUT);
 
-    HotZone EscBtn(240,200,320,280);
+  Disbuff.fillRect(193, 103, 14, 47, TFT_RED);
 
-    TouchPoint_t pos = M5.Touch.getPressPoint();
+  if( sysState.soundFlag ) {
+    Disbuff.fillRect(193, 165, 14, 47, TFT_GREEN);
+  }
+  else {
+      Disbuff.fillRect(193, 165, 14, 47, TFT_RED);
+  }
+  Disbuff.pushSprite(0, 0);
 
-    bool pressed = false;
-    uint8_t IOState = 0;
-    uint8_t MotorState = 1;
+  while(true) {
+    pos = M5.Touch.getPressPoint();
+    if((pos.x != -1 )&&( pressed == false)) {
+        pressed       = true;
+        msg.state     = MODE_SPK;
+        msg.audioPtr  = (void*)bibiSig;
+        msg.audioSize = 8820;
+        xQueueSend(i2sstateQueue, &msg, (TickType_t)portMAX_DELAY);
 
-    uint8_t ioBuff[6] = {14,13,32,33,19,27};
-    uint8_t iostatebuff[4][6] = {
-        {1,1,1,1,1,1},
-        {0,1,0,1,0,1},
-        {1,0,1,0,1,0},
-        {0,0,0,0,0,0},
-    };
-
-    uint16_t adcReadCount = 0;
-    i2sQueueMsg_t msg;
-
-    msg.state = MODE_SPK;
-    msg.audioPtr = (void*)bibiSig;
-    msg.audioSize = 8820;
-
-    pinMode(14,OUTPUT);
-    pinMode(13,OUTPUT);
-    pinMode(32,OUTPUT);
-    pinMode(33,OUTPUT);
-    pinMode(19,OUTPUT);
-    pinMode(27,OUTPUT);
-
-    Disbuff.fillRect(193,103,14,47,TFT_RED);
-
-    if( sysState.soundFlag )
-    {
-        Disbuff.fillRect(193,165,14,47,TFT_GREEN);
-    }
-    else
-    {
-        Disbuff.fillRect(193,165,14,47,TFT_RED);
-    }
-    
-    Disbuff.pushSprite(0,0);
-
-    while(1)
-    {
-        pos = M5.Touch.getPressPoint();
-        
-        if(( pos.x != -1 )&&( pressed == false ))
-        {
-            pressed = true;
-
-            msg.state = MODE_SPK;
-            msg.audioPtr = (void*)bibiSig;
-            msg.audioSize = 8820;
-
-            xQueueSend(i2sstateQueue,&msg,(TickType_t)portMAX_DELAY);
-
-            if( IOBtn.inHotZone(pos))
-            {
-                for( int i = 0; i < 6; i++ )
-                {
-                    digitalWrite(ioBuff[i],iostatebuff[IOState][i]);
-                }
-                IOState++;
-                IOState = ( IOState >= 4 ) ? 0 : IOState;
-                Serial.printf("Set IOState %d \n",IOState);
+        if(IOBtn.inHotZone(pos)) {
+            for(int i = 0; i < 6; i++) {
+              digitalWrite(ioBuff[i], iostatebuff[IOState][i]);
             }
-
-            if( MotorBtn.inHotZone(pos))
-            {
-                M5.Axp.SetLDOEnable(3,MotorState);
-                if( MotorState == 1 )
-                {
-                    Disbuff.fillRect(193,103,14,47,TFT_GREEN);
-                }
-                else
-                {
-                    Disbuff.fillRect(193,103,14,47,TFT_RED);
-                }
-                Disbuff.pushSprite(0,0);
-                MotorState = ( MotorState == 0 ) ? 1 : 0;
-                Serial.printf("Set Motor %d \n",MotorState);
-
-            }
-            //
-            if( SoundBtn.inHotZone(pos))
-            {
-                sysState.soundFlag = ( sysState.soundFlag == true ) ? false : true;
-                M5.Axp.SetSpkEnable(sysState.soundFlag);
-
-                if( sysState.soundFlag )
-                {
-                    Disbuff.fillRect(193,165,14,47,TFT_GREEN);
-                }
-                else
-                {
-                    Disbuff.fillRect(193,165,14,47,TFT_RED);
-                }
-                Disbuff.pushSprite(0,0);
-            }
-
-            if( TFTBtn.inHotZone(pos))
-            {
-                TFTTest();
-            }
-
-            if( EscBtn.inHotZone(pos))
-            {
-                break;
-            }
-        }
-        
-        else if( pos.x == -1 )
-        {
-            pressed = false;
+            IOState++;
+            IOState = (IOState >= 4) ? 0 : IOState;
+            Serial.printf("Set IOState %d \n",IOState);
         }
 
-        if( adcReadCount > 50 )
-        {
-            adcReadCount = 0;
-            uint16_t pin35ADC = analogRead(35);
-            double pin35vol = (double)pin35ADC *  3.3 / 4096;
-            uint16_t pin36ADC = analogRead(36);
-            double pin36vol = (double)pin36ADC *  3.3 / 4096;
-
-            if(( pin35vol > 1.8 )&&( pin35vol < 2.2 ))
-            {
-                Disbuff.fillRect(86,103,14,21,TFT_GREEN);
-            }
-            else
-            {
-                Disbuff.fillRect(86,103,14,21,TFT_RED);
-            }
-            
-            if(( pin36vol > 0.8 )&&( pin36vol < 1.2 ))
-            {
-                Disbuff.fillRect(86,129,14,21,TFT_GREEN);
-            }
-            else
-            {
-                Disbuff.fillRect(86,129,14,21,TFT_RED);
-            }
-            Disbuff.pushSprite(0,0);
-            Serial.printf("ADC:%.2f,%.2f\n",pin35vol,pin36vol);
+        if(MotorBtn.inHotZone(pos)) {
+          M5.Axp.SetLDOEnable(3, MotorState);
+          if(MotorState == 1) {
+            Disbuff.fillRect(193, 103, 14, 47, TFT_GREEN);
+          }
+          else {
+            Disbuff.fillRect(193, 103, 14, 47, TFT_RED);
+          }
+          Disbuff.pushSprite(0, 0);
+          MotorState = (MotorState == 0) ? 1 : 0;
+          Serial.printf("Set Motor %d \n",MotorState);
         }
-        adcReadCount ++;
-        delay(10);
+
+        if(SoundBtn.inHotZone(pos)) {
+          sysState.soundFlag = ( sysState.soundFlag == true ) ? false : true;
+          M5.Axp.SetSpkEnable(sysState.soundFlag);
+
+          if(sysState.soundFlag) {
+            Disbuff.fillRect(193, 165, 14, 47, TFT_GREEN);
+          }
+          else {
+            Disbuff.fillRect(193, 165, 14, 47, TFT_RED);
+          }
+          Disbuff.pushSprite(0, 0);
+        }
+        if(TFTBtn.inHotZone(pos)) TFTTest();
+        if(EscBtn.inHotZone(pos)) break;
     }
-    msg.state = MODE_MIC;
+    else if(pos.x == -1) {
+      pressed = false;
+    }
 
-    xQueueSend(i2sstateQueue,&msg,(TickType_t)portMAX_DELAY);
+    if( adcReadCount > 50 ) {
+      adcReadCount      = 0;
+      uint16_t pin35ADC = analogRead(35);
+      double pin35vol   = (double)pin35ADC *  3.3 / 4096;
+      uint16_t pin36ADC = analogRead(36);
+      double pin36vol   = (double)pin36ADC *  3.3 / 4096;
 
-    Disbuff.drawJpg(CoreMainImage,87169,0,0,320,240,0,0);
-    Disbuff.pushSprite(0,0);
+      if((pin35vol > 1.8 ) && (pin35vol < 2.2)) {
+        Disbuff.fillRect(86, 103, 14, 21, TFT_GREEN);
+      }
+      else {
+        Disbuff.fillRect(86, 103, 14, 21, TFT_RED);
+      }
+      if((pin36vol > 0.8) && (pin36vol < 1.2)) {
+        Disbuff.fillRect(86, 129, 14, 21, TFT_GREEN);
+      }
+      else {
+        Disbuff.fillRect(86, 129, 14, 21, TFT_RED);
+      }
+      Disbuff.pushSprite(0, 0);
+      Serial.printf("ADC:%.2f,%.2f\n",pin35vol,pin36vol);
+  }
+  adcReadCount ++;
+  delay(10);
+  }
+  msg.state = MODE_MIC;
 
-    sysState.power = kPOWER_MAX;
+  xQueueSend(i2sstateQueue,&msg,(TickType_t)portMAX_DELAY);
 
+  Disbuff.drawJpg(CoreMainImage, 87169, 0, 0, 320, 240, 0, 0);
+  Disbuff.pushSprite(0, 0);
+  sysState.power = kPOWER_MAX;
 }
+
 
 void MPU6886Page()
 {

@@ -4,12 +4,20 @@
             "path": "Libraries"
         },
         {
-            "name": "Home",
-            "path": "Apps\\Home"
+            "name": "ButtonSizeTest",
+            "path": "Apps\\ButtonSizeTest"
         },
         {
             "name": "Clock",
             "path": "Apps\\Clock"
+        },
+        {
+            "name": "Clock",
+            "path": "Apps\\Clock"
+        },
+        {
+            "name": "FactoryTest",
+            "path": "Apps\\FactoryTest"
         },
         {
             "name": "FileMgr",
@@ -30,10 +38,6 @@
         {
             "name": "TouchView",
             "path": "Apps\\TouchView"
-        },
-        {
-            "name": "FactoryTest",
-            "path": "Apps\\FactoryTest"
         }
     ],
     "settings": {

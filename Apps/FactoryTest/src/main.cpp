@@ -188,7 +188,7 @@ int check_i2c_addr() {
   i2cDevice_t *lastptr = &i2cParentptr;
   do {
     lastptr = lastptr->nextPtr;
-    Serial.printf("Addr:0x%02X - Name:%s\r\n", lastptr->addr, lastptr->name.c_str());
+    DEBUG("Addr:0x%02X - Name:%s\r\n", lastptr->addr, lastptr->name.c_str());
     Wire1.beginTransmission(lastptr->addr);
     if(Wire1.endTransmission() == 0) {
       String log = "I2C " + lastptr->name + " Found";
@@ -230,8 +230,8 @@ int check_sd_card() {
   }
   else {
     cover_scroll_text("SDCard Found",M5.Lcd.color565(SUCCESS_COLOR));
-    Serial.printf("SDCard Type = %d \r\n", Type);
-    Serial.printf("SDCard Size = %d \r\n", (int)(SD.cardSize() / 1024 / 1024));
+    DEBUG("SDCard Type = %d \r\n", Type);
+    DEBUG("SDCard Size = %d \r\n", (int)(SD.cardSize() / 1024 / 1024));
   }
   return 0;
 }
@@ -451,7 +451,6 @@ static void i2s_micro_fft_task(void *arg) {
       }
       xQueueSend( fft_value_queue, (void * )&FFTValueBuff, 0 );
       fft_destroy(real_fft_plan);
-      DEBUG("mmp\n");
     }
     else {
       delay(10);
@@ -669,8 +668,8 @@ void sd_card_setup() {
     disp_sd_card_buff.drawColorBitmap(33, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize / 100 % 10],    0xff9c00, 0x000000);
     disp_sd_card_buff.drawColorBitmap(40, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize / 10 % 10],     0xff9c00, 0x000000);
     disp_sd_card_buff.drawColorBitmap(50, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize % 10],          0xff9c00, 0x000000);
-    Serial.printf("SDCard Type = %d \r\n", Type);
-    Serial.printf("SDCard Size = %d \r\n", (int)(SD.cardSize() / 1024 / 1024));
+    DEBUG("SDCard Type = %d \r\n", Type);
+    DEBUG("SDCard Size = %d \r\n", (int)(SD.cardSize() / 1024 / 1024));
   }
   disp_sd_card_buff.pushSprite(3,4);
 }
@@ -701,8 +700,8 @@ void sd_card_flush() {
     disp_sd_card_buff.drawColorBitmap(33, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize / 100 % 10],     0xff9c00, 0x000000);
     disp_sd_card_buff.drawColorBitmap(40, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize / 10 % 10],      0xff9c00, 0x000000);
     disp_sd_card_buff.drawColorBitmap(50, 19, 7, 10, (uint8_t*)Number_7x10px[sdcardSize % 10],           0xff9c00, 0x000000);
-    Serial.printf("SDCard Type = %d\n", Type);
-    Serial.printf("SDCard Size = %d\n", (int)(SD.cardSize() / 1024 / 1024));
+    DEBUG("SDCard Type = %d\n", Type);
+    DEBUG("SDCard Size = %d\n", (int)(SD.cardSize() / 1024 / 1024));
   }
   disp_sd_card_buff.pushSprite(3, 4);
 }
@@ -1114,7 +1113,7 @@ void app_setting() {
   bool          pressed       = false;
   uint8_t       IOState       = 0;
   uint8_t       MotorState    = 1;
-  uint8_t       ioBuff[6]     = {14, 13, 32, 33, 19, 27};
+  uint8_t       ioBuff[6]     = {14, 13, 32, 33, 19, 27}; // Pins for I/O to write to
   uint16_t      adcReadCount  = 0;
   uint8_t       iostatebuff[4][6] = {
       {1, 1, 1, 1, 1, 1},
@@ -1194,7 +1193,7 @@ void app_setting() {
       pressed = false;
     }
 
-    if( adcReadCount > 50 ) {
+    if(adcReadCount > 50) {
       adcReadCount      = 0;
       uint16_t pin35ADC = analogRead(35);
       double pin35vol   = (double)pin35ADC *  3.3 / 4096;
@@ -1214,10 +1213,10 @@ void app_setting() {
         disp_buff.fillRect(86, 129, 14, 21, TFT_RED);
       }
       disp_buff.pushSprite(0, 0);
-      Serial.printf("ADC:%.2f,%.2f\n",pin35vol,pin36vol);
-  }
-  adcReadCount ++;
-  delay(10);
+      Serial.printf("ADC:%.2f, %.2f\n", pin35vol, pin36vol);
+    }
+    adcReadCount ++;
+    delay(10);
   }
   msg.state = MODE_MIC;
 

@@ -61,6 +61,7 @@ uint32_t        start_ticks;
 // Draw the button size and hit/miss total at top of screen
 //
 void draw_info() {
+  VERBOSE("draw_info()\n");
   char buffer[64];
   banner.fillRect(0, 0, 320, BANNER_HEIGHT, BLACK);
   sprintf(buffer, "Width: %d,  Height: %d,  Spacing: %d", width, height, spacing);
@@ -74,6 +75,7 @@ void draw_info() {
 // Draw the button lables at the bottom of the screen
 //
 void draw_labels() {
+  VERBOSE("draw_labels()\n");
   banner.fillRect(0, 0, SCREEN_WIDTH, BANNER_HEIGHT, BLACK);
   banner.setTextColor(WHITE, BLACK);
   banner.drawCentreString(modes[mode], 54, 322, 2);
@@ -87,6 +89,7 @@ void draw_labels() {
 // Exactly 20 charaters long. Use global start_time as buffer.
 //
 void store_start_time() {
+  VERBOSE("store_start_time()\n");
   RTC_DateTypeDef date;
   RTC_TimeTypeDef time;
   start_ticks = millis();
@@ -99,6 +102,7 @@ void store_start_time() {
 // Touch Event Handler
 //
 void button_pressed(Event& e) {
+  VERBOSE("button_pressed(Event&)\n");
   Button& button = *e.button;
 
   if(test_starting) {
@@ -127,6 +131,7 @@ void button_pressed(Event& e) {
 // Return how many buttons still have their userData set to 1.
 //
 int16_t active_count(vector<vector<Button*>> buttons) {
+  // VERBOSE("active_count(buttons)\n"); Too frequent to monitor
   int16_t result = 0;
   for(auto i = buttons.begin(); i != buttons.end(); ++i)
     for(auto j = i->begin(); j != i->end(); ++j)
@@ -139,6 +144,7 @@ int16_t active_count(vector<vector<Button*>> buttons) {
 // Return true if settings changed, not if category changed.
 //
 bool test_abc() {
+  // VERBOSE("test_abc()\n"); Too frequent to monitor
   if(M5.BtnA.wasPressed()) {
     mode++;
     if(mode > max_mode) mode = 0;
@@ -190,10 +196,12 @@ bool test_abc() {
 // Return true if the test was completed w/o interruption
 //
 bool take_test(vector<vector<Button*>> buttons) {
+  VERBOSE("take_test(buttons)\n");
   int16_t rows  = buttons.size();     // Number of rows in the 2D vector
   int16_t cols  = buttons[0].size();  // assumes 2D vector is rectangular
   int16_t count = rows * cols;        // Total number of buttons
 
+  DEBUG("rows = %d, cols = %d, count = %d\n", rows, cols, count);
   hits = misses = 0;
   int16_t num = min(NUM_ACTIVE, count);
   draw_info();
@@ -219,6 +227,7 @@ bool take_test(vector<vector<Button*>> buttons) {
 // (Nothing is done with the structure at this point, may be handy in the future.)
 //
 void collect_score(Score& score) {
+  VERBOSE("collect_score(Score)\n");
   score.seconds = (float)(millis() - start_ticks) / 1000.0;
   strncpy(score.start, start_time, 20);
   score.height  = height;
@@ -226,32 +235,36 @@ void collect_score(Score& score) {
   score.spacing = spacing;
   score.hits    = hits;
   score.misses  = misses;
-  Serial.printf("{ \"date\": \"%s\", \"width\": %2d, \"height\": %2d, \"spacing\": %2d, \"seconds\": %2.2f, \"hits\": %d, \"misses\": %d }\n",
-                score.start, score.width, score.height, score.spacing, score.seconds, score.hits, score.misses);
+  INFO("{ \"date\": \"%s\", \"width\": %2d, \"height\": %2d, \"spacing\": %2d, \"seconds\": %2.2f, \"hits\": %d, \"misses\": %d }\n",
+       score.start, score.width, score.height, score.spacing, score.seconds, score.hits, score.misses);
 }
 
 
 // Create a regular 2D vector of as many buttons as fit the display area..
 //
 vector<vector<Button*>> create_buttons(int16_t h_pixels, int16_t v_pixels, int16_t spacing = 0) {
+  VERBOSE("create_buttons(%d, %d, %d)\n", h_pixels, v_pixels, spacing);
   vector<vector<Button*>> buttons;
   uint8_t h_count   = (int16_t)((SCREEN_WIDTH  + spacing) / (h_pixels + spacing));
   uint8_t v_count   = (int16_t)((SCREEN_HEIGHT + spacing) / (v_pixels + spacing));
   uint8_t h_offset  = (SCREEN_WIDTH  - ((h_pixels + spacing) * h_count) + spacing) / 2;
   uint8_t v_offset  = (SCREEN_HEIGHT - ((v_pixels + spacing) * v_count) + spacing) / 2;
+  DEBUG("h_count = %d, v_count = %d, h_offset = %d, v_offset = %d\n", h_count, v_count, h_offset, v_offset);
 
-  for(uint8_t h = 0; h < h_count; h++) {
+  for(uint8_t v = 0; v < v_count; v++) {
     vector<Button*> row;
-    for(uint8_t v = 0; v < v_count; v++) {
+    for(uint8_t h = 0; h < h_count; h++) {
       Button* button = new Button(h_offset + (h * (h_pixels + spacing)),
                                   SCREEN_TOP + v_offset + (v * (v_pixels + spacing)),
                                   h_pixels, v_pixels, false, "", offColors, onColors, MC_DATUM, 0, 0, 0);
       button->userData = 0;
       button->addHandler(button_pressed, E_TOUCH);
       row.push_back(button);
+      DEBUG("New button: x = %3d, y = %3d, w = %2d, h = %2d\n", button->x, button->y, button->w, button->h);
     }
     buttons.push_back(row);
   }
+  DEBUG("Button::instances length = %d\n\n", Button::instances.size());
   M5.Buttons.draw();
   return buttons;
 }
@@ -260,6 +273,7 @@ vector<vector<Button*>> create_buttons(int16_t h_pixels, int16_t v_pixels, int16
 // Delete every button in the regular 2D vector.
 //
 void delete_buttons(vector<vector<Button*>> buttons) {
+  VERBOSE("delete_buttons(buttons)\n");
   for(auto i = buttons.begin(); i != buttons.end(); ++i)
     for(auto j = i->begin(); j != i->end(); ++j)
         delete *j;
@@ -278,6 +292,7 @@ void setup() {
 // Arduino loop routine. Run one test per loop.
 //
 void loop() {
+  VERBOSE("loop()\n");
   Score score;
   M5.Lcd.fillRect(0, SCREEN_TOP, SCREEN_WIDTH, SCREEN_HEIGHT, BLUE);
   draw_info();

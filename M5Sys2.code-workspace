@@ -12,10 +12,6 @@
             "path": "Apps\\Clock"
         },
         {
-            "name": "Clock",
-            "path": "Apps\\Clock"
-        },
-        {
             "name": "FactoryTest",
             "path": "Apps\\FactoryTest"
         },
@@ -30,6 +26,10 @@
         {
             "name": "SoundMon",
             "path": "Apps\\SoundMon"
+        },
+        {
+            "name": "TouchCalc",
+            "path": "Apps\\TouchCalc"
         },
         {
             "name": "TouchGoal",

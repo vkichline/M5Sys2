@@ -4,6 +4,10 @@
             "path": "Libraries"
         },
         {
+            "name": "Home",
+            "path": "Apps\\Home"
+        },
+        {
             "name": "ButtonSizeTest",
             "path": "Apps\\ButtonSizeTest"
         },

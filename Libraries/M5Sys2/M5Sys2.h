@@ -34,6 +34,7 @@ class M5Sys2 {
     void        launch(const char* app_name);
     const char* get_app_name();
     bool        start_spiffs(bool formatOnFailure = false);
+    bool        screen_shot(const char* file_name = nullptr);
     Logger      log;
   private:
     void        _check_for_reload();

@@ -98,6 +98,12 @@ void ezScreenShot::snap() {
 	// Write the bitmap data
 	for(int i = 239; i >= 0; i--) {
 	M5.Lcd.readRectRGB(0, i, 320, 1, data);
+	// RGB -> BGR
+	for(int i = 0; i < 320; i++) {
+		uint8_t temp = data[i * 3];
+		data[i * 3]  = data[(i * 3) + 2];
+		data[(i * 3) + 2] = temp;
+	}
 	file.write(data, 320 * 3);
 	}
 	file.close();

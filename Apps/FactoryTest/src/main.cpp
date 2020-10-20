@@ -363,8 +363,8 @@ void mpu6886_test() {
 
 void clock_setup() {
   VERBOSE("clock_setup()\n");
-  disp_clock_buff.createSprite(164,101);
-  disp_clock_buff.drawJpg(clockImage,18401,0,0,163,101);
+  disp_clock_buff.createSprite(164, 101);
+  disp_clock_buff.drawJpg(clockImage, 18401, 0, 0, 163, 101);
 }
 
 
@@ -707,6 +707,21 @@ void sd_card_flush() {
 }
 
 
+bool ends_with(const char *filename, const char *ext) {
+  const uint len = strlen(filename);
+  const uint extLen = strlen(ext);
+  if (len < extLen) {
+    return false;
+  }
+  for (uint index  = 1; index <= extLen; index++) {
+    if (filename[len - index] != ext[extLen - index]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
 void draw_jpeg_image_from_sd_card(fs::FS &fs, const char *dirname) {
   VERBOSE("draw_jpeg_image_from_sd_card(fs, %s)\n", dirname);
   TouchPoint_t pos = M5.Touch.getPressPoint();
@@ -741,9 +756,14 @@ void draw_jpeg_image_from_sd_card(fs::FS &fs, const char *dirname) {
   while (true) {
     if (Count >= 200) {
       if (!file.isDirectory()) {
-        disp_buff.drawJpgFile(fs, file.name(), 0, 0, 320, 240);
-        disp_buff.getSprite2Buff(buff, 0, 206, 320, 34);
-        flushJPEG = true;
+        if(ends_with(file.name(), ".jpg")) {
+          disp_buff.drawJpgFile(fs, file.name(), 0, 0, 320, 240);
+          disp_buff.getSprite2Buff(buff, 0, 206, 320, 34);
+          flushJPEG = true;
+        }
+        else if(ends_with(file.name(), ".bmp")) {
+          M5.Lcd.drawBmpFile(fs, file.name(), 0, 0);
+        }
       }
       file = root.openNextFile();
       if (!file) {

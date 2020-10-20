@@ -12,18 +12,17 @@ std::vector<Location_t> ezLocation::locations;
 String ezLocation::_current_location = "";
 
 
-bool ezLocation::entry(uint8_t command, void *user) {
+bool ezLocation::entry(uint8_t command, void* /* data */) {
 	switch (command) {
-
-	case FEATURE_MSG_PING:
-		return true;
-	case FEATURE_MSG_START:
-		begin();
-		return true;
-	case FEATURE_MSG_QUERY_ENABLED:
-		return true;
-	case FEATURE_MSG_FACES_POLL:
-		return false;
+		case FEATURE_MSG_PING:
+			return true;
+		case FEATURE_MSG_START:
+			begin();
+			return true;
+		case FEATURE_MSG_QUERY_ENABLED:
+			return true;
+		case FEATURE_MSG_FACES_POLL:
+			return false;
 	}
 	return false;
 }

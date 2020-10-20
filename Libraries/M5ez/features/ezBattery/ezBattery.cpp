@@ -7,7 +7,7 @@
 bool ezBattery::_on = false;
 uint8_t ezBattery::_numChargingBars = BATTERY_CHARGING_OFF;
 
-bool ezBattery::entry(uint8_t command, void* /* user */) {
+bool ezBattery::entry(uint8_t command, void* /* data */) {
 	switch(command) {
 		case FEATURE_MSG_PING:
 			return true;

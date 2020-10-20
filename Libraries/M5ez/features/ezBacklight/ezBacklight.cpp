@@ -12,7 +12,7 @@ uint32_t ezBacklight::_last_activity;
 bool ezBacklight::_backlight_off = false;
 
 
-bool ezBacklight::entry(uint8_t command, void* /* user */) {
+bool ezBacklight::entry(uint8_t command, void* /* data */) {
 	switch(command) {
 		case FEATURE_MSG_PING:
 			activity();

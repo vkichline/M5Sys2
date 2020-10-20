@@ -21,7 +21,7 @@ struct WifiNetwork_t {
 
 class ezWifi {
 	public:
-		static bool entry(uint8_t command, void* /* user */);
+		static bool entry(uint8_t command, void* data);
 		static void begin();
 		static void menu();
 		static void add(String ssid, String key);

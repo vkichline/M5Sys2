@@ -735,6 +735,9 @@ std::vector<feature_t> M5ez::features = {
 #ifdef FEATURE_INSTALL_LOCATION
 	{"ezLocation", ezLocation::entry},
 #endif
+#ifdef FEATURE_INSTALL_SCREENSHOT
+	{"ezScreenShot", ezScreenShot::entry},
+#endif
 };
 
 // Compatability initialization
@@ -758,6 +761,9 @@ std::vector<feature_t> M5ez::features = {
 #endif
 #ifdef FEATURE_INSTALL_LOCATION
 	ezLocation M5ez::location;
+#endif
+#ifdef FEATURE_INSTALL_SCREENSHOT
+	ezScreenShot M5ez::screenShot;
 #endif
 
 

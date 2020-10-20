@@ -5,7 +5,7 @@
 
 class ezBacklight {
 	public:
-		static bool entry(uint8_t command, void* user);
+		static bool entry(uint8_t command, void* data);
 		static void begin();
 		static void menu();
 		static void inactivity(uint8_t half_minutes);

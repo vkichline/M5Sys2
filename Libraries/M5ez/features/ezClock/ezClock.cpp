@@ -11,7 +11,7 @@ bool ezClock::_am_pm;
 String ezClock::_datetime;
 bool ezClock::_starting = true;
 
-bool ezClock::entry(uint8_t command, void* /* user */) {
+bool ezClock::entry(uint8_t command, void* /* data */) {
 	switch(command) {
 		case FEATURE_MSG_PING:
 			return true;

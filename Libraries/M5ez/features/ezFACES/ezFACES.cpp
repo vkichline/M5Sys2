@@ -5,7 +5,7 @@
 
 bool ezFACES::_on;
 
-bool ezFACES::entry(uint8_t command, void* user) {
+bool ezFACES::entry(uint8_t command, void* data) {
     switch(command) {
         case FEATURE_MSG_PING:
 			return true;
@@ -15,12 +15,12 @@ bool ezFACES::entry(uint8_t command, void* user) {
 		case FEATURE_MSG_QUERY_ENABLED:
 			return on();
 		case FEATURE_MSG_FACES_POLL:
-			if(nullptr == user) {
+			if(nullptr == data) {
 				poll();
 				return true;
 			}
 			else {
-				String* p_str = (String*)user;
+				String* p_str = (String*)data;
 				*p_str = poll();
 				return 0 < p_str->length();
 			}

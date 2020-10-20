@@ -26,7 +26,7 @@ bool ezWifi::autoConnect;
 #endif
 
 
-bool ezWifi::entry(uint8_t command, void* /* user */) {
+bool ezWifi::entry(uint8_t command, void* /* data */) {
 	switch(command) {
 		case FEATURE_MSG_PING:
 			return true;

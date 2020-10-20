@@ -47,6 +47,7 @@
 #define FEATURE_INSTALL_EZBATTERY		// Enable built-in feature ezBattery
 #define FEATURE_INSTALL_EZBLE			// Enable built-in feature ezBLE
 #define FEATURE_INSTALL_LOCATION		// Enable built-in feature ezLocation
+#define FEATURE_INSTALL_SCREENSHOT		// Enable built-in feature ezScreenShot
 
 // For compatability defines in M5ez object
 #ifdef FEATURE_INSTALL_EZWIFI
@@ -69,6 +70,9 @@
 #endif
 #ifdef FEATURE_INSTALL_LOCATION
 	class ezLocation;
+#endif
+#ifdef FEATURE_INSTALL_SCREENSHOT
+	class ezScreenShot;
 #endif
 
 
@@ -545,6 +549,9 @@ class M5ez {
 		#ifdef FEATURE_INSTALL_LOCATION
 			static ezLocation location;
 		#endif
+		#ifdef FEATURE_INSTALL_SCREENSHOT
+			static ezScreenShot screenShot;
+		#endif
 
 	private:
 		static bool _begun;
@@ -589,6 +596,9 @@ class M5ez {
 #endif
 #ifdef FEATURE_INSTALL_LOCATION
 	#include "features/ezLocation/ezLocation.h"
+#endif
+#ifdef FEATURE_INSTALL_SCREENSHOT
+	#include "features/ezScreenShot/ezScreenShot.h"
 #endif
 
 

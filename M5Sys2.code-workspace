@@ -50,6 +50,10 @@
         {
             "name": "TouchView",
             "path": "Apps\\TouchView"
+        },
+        {
+            "name": "WiFiScanner",
+            "path": "Apps\\WiFiScanner"
         }
     ],
     "settings": {

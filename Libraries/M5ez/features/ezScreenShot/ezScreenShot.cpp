@@ -141,7 +141,6 @@ void ezScreenShot::snap() {
 
 
 uint16_t ezScreenShot::loop() {
-	float	dummy, z;
 	if(_on && _last_snap + SNAP_DELAY < millis()) {
 		if(_trigger_orentation == get_orientation()) {
 			Serial.println("saving screenshot");

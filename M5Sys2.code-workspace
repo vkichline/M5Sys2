@@ -53,7 +53,8 @@
             "unordered_set": "cpp",
             "vector": "cpp",
             "initializer_list": "cpp",
-            "sstream": "cpp"
+            "sstream": "cpp",
+            "*.tcc": "cpp"
         }
     }
 }

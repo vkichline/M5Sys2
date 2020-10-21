@@ -8,7 +8,7 @@ bool ascending_alpha_case_insensitive_comp(const char* s1, const char* s2)  { re
 
 
 void FileScanner::menu(const char* title) {
-  VERBOSE("FileScanner::scan_files(%s)\n", title);
+  VERBOSE("FileScanner::menu(%s)\n", title);
   ezMenu  m(title);
   m.txtSmall();
   m.buttons("up # Back # select ##  down #");
@@ -17,8 +17,7 @@ void FileScanner::menu(const char* title) {
   File root = fs.open("/");
   create_menu(m, root);
   root.close();
-  while(true) {
-    if(0 == m.runOnce()) return;  // If Back was selected
+  while(m.runOnce()) {
     // A file was selected from the menu. Make sure it's just a file, and not a menu item with this\tthat syntax
     String selection = m.pickName();
     DEBUG("Selection = %s\n", selection.c_str());
@@ -41,8 +40,8 @@ void FileScanner::menu(const char* title) {
 }
 
 
-bool FileScanner::isTextByExtension(const char* fname) {
-  VERBOSE("FileScanner::isTextByExtension(%s)\n", fname);
+bool FileScanner::is_text_by_extension(const char* fname) {
+  VERBOSE("FileScanner::is_text_by_extension(%s)\n", fname);
   char* ext = strrchr(fname, '.');
   if(ext) {
     for(int i = 0; i < sizeof(text_extensions)/sizeof(char*); i++) {
@@ -55,12 +54,41 @@ bool FileScanner::isTextByExtension(const char* fname) {
 }
 
 
+bool FileScanner::is_image_by_extension(const char* fname) {
+  VERBOSE("FileScanner::is_image_by_extension(%s)\n", fname);
+  char* ext = strrchr(fname, '.');
+  if(ext) {
+    for(int i = 0; i < sizeof(image_extensions)/sizeof(char*); i++) {
+      if(0 == strcasecmp(image_extensions[i], ext)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+
 void FileScanner::edit_file(const char* fname) {
-  VERBOSE("FileScanner::file_info(%s)\n", fname);
+  VERBOSE("FileScanner::edit_file(%s)\n", fname);
   File target    = fs.open(fname, "r");
   String content = target.readString();
   target.close();
   ez.textBox(fname, content);
+}
+
+
+void FileScanner::display_file(const char* fname) {
+  VERBOSE("FileScanner::display_file(%s)\n", fname);
+  char* ext = strrchr(fname, '.');
+  if(!ext) return;
+  M5.Lcd.fillScreen(BLACK);
+  if     (0 == strcmp(".bmp", ext)) M5.Lcd.drawBmpFile(SD, fname, 0, 0);
+  else if(0 == strcmp(".jpg", ext)) M5.Lcd.drawJpgFile(SD, fname, 0, 0, 320, 240);
+  else if(0 == strcmp(".png", ext)) M5.Lcd.drawPngFile(SD, fname, 0, 0, 320, 240);
+  while(true) {
+    M5.update();
+    if(M5.Touch.points) return;
+  }
 }
 
 
@@ -148,7 +176,8 @@ bool FileScanner::process_file(const char* fname) {
 
   m.addItem("Info");
   m.addItem("Delete");
-  if(isTextByExtension(fname)) m.addItem("Edit"); // Add Edit menu if this is a text file
+  if(is_text_by_extension(fname))  m.addItem("Edit");     // Add Edit menu if this is a text file
+  if(is_image_by_extension(fname)) m.addItem("Display");  // Add Display menu if this is a text file
   m.addItem("Hex Dump");
 
   while(true) {
@@ -158,6 +187,7 @@ bool FileScanner::process_file(const char* fname) {
     if(0 == mname.compareTo("Info"))      file_info(fname);
     if(0 == mname.compareTo("Delete"))    if(delete_file(fname)) return true;
     if(0 == mname.compareTo("Edit"))      edit_file(fname);
+    if(0 == mname.compareTo("Display"))   display_file(fname);
     if(0 == mname.compareTo("Hex Dump"))  hex_dump(fname);
   }
 }
@@ -168,7 +198,7 @@ bool FileScanner::process_file(const char* fname) {
 // All file names are printed to the log.
 //
 void FileScanner::create_menu(ezMenu& m, File dir) {
-  VERBOSE("FileScanner::scan(menu, %s)\n", dir.name());
+  VERBOSE("FileScanner::create_menu(menu, %s)\n", dir.name());
   int fileCountInDir = 0;
   File file = dir.openNextFile();
   while(file) {

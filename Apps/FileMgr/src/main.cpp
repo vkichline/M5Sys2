@@ -87,8 +87,8 @@ void loop() {
   ezMenu m("File Manager");
   m.txtSmall();
   m.buttons("up # back | Home # select ## down #");
-  m.addItem("SD Card Info",               show_sd_info);
   m.addItem("Display SD Card Files",      scan_sd_files);
+  m.addItem("SD Card Info",               show_sd_info);
   m.addItem("Remove All Hidden SD Files", remove_hidden_files);
   if(!spiffs_disabled) {
     m.addItem("SPIFFS Info",              show_spiffs_info);

@@ -24,6 +24,14 @@
             "path": "Apps\\FileMgr"
         },
         {
+            "name": "IChing",
+            "path": "Apps\\IChing"
+        },
+        {
+            "name": "Life",
+            "path": "Apps\\Life"
+        },
+        {
             "name": "SettingsStorage",
             "path": "Apps\\SettingsStorage"
         },
